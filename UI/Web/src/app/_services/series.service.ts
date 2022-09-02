@@ -10,6 +10,7 @@ import { CollectionTag } from '../_models/collection-tag';
 import { PaginatedResult } from '../_models/pagination';
 import { Series } from '../_models/series';
 import { RelatedSeries } from '../_models/series-detail/related-series';
+import { SeriesExternalLinks } from '../_models/series-detail/series-external-links';
 import { SeriesDetail } from '../_models/series-detail/series-detail';
 import { SeriesFilter } from '../_models/series-filter';
 import { SeriesGroup } from '../_models/series-group';
@@ -199,6 +200,20 @@ export class SeriesService {
     return this.httpClient.post(this.baseUrl + 'series/update-related?seriesId=' + seriesId, 
     {seriesId, adaptations, characters, sequels, prequels, contains, others, sideStories, spinOffs,
      alternativeSettings, alternativeVersions, doujinshis}); 
+  }
+
+  getExternalLinksForSeries(seriesId: number) {
+    // return this.httpClient.get<SeriesExternalLinks>(this.baseUrl + 'series/all-external-links?seriesId=' + seriesId);
+
+    var testing = <SeriesExternalLinks>{};
+    testing.myanimelist = ["119375","https://myanimelist.net/manga/11/Naruto"];
+    testing.anilist = ["109310"];
+    testing.otherWebsite = ["https://www.kavitareader.com"];
+    return testing;
+  }
+
+  updateExternalLinks(seriesId: number, otherWebsite: Array<string>) {
+    console.log("updateExternalLinks triggered!");
   }
 
   getSeriesDetail(seriesId: number) {

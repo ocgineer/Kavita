@@ -29,6 +29,7 @@ enum TabID {
   CoverImage = 3,
   Related = 4,
   Info = 5,
+  ExternalLinks =6,
 }
 
 @Component({
@@ -49,7 +50,7 @@ export class EditSeriesModalComponent implements OnInit, OnDestroy {
 
   isCollapsed = true;
   volumeCollapsed: any = {};
-  tabs = ['General', 'Metadata', 'People', 'Cover Image', 'Related', 'Info'];
+  tabs = ['General', 'Metadata', 'People', 'Cover Image', 'Related Series', 'Info', 'External Links'];
   active = this.tabs[0];
   activeTabId = TabID.General;
   editSeriesForm!: FormGroup;

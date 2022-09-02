@@ -334,7 +334,14 @@
                     <ng-template ngbNavContent>
                       <app-edit-series-relation [series]="series" [save]="saveNestedComponents"></app-edit-series-relation>
                     </ng-template>
-                  </li>
+                </li>
+                <li [ngbNavItem]="tabs[TabID.ExternalLinks]">
+                    <a ngbNavLink>{{tabs[TabID.ExternalLinks]}}</a>
+                    <ng-template ngbNavContent>
+                        <!--<app-edit-series-external-links [elinks]="elinks" [save]="saveNestedComponents"></app-edit-series-external-links>-->
+                        <app-edit-series-external-links></app-edit-series-external-links>
+                    </ng-template>
+                </li>
                 <li [ngbNavItem]="tabs[TabID.Info]">
                   <a ngbNavLink>{{tabs[TabID.Info]}}</a>
                   <ng-template ngbNavContent>

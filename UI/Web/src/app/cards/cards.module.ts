@@ -19,6 +19,7 @@ import { PipeModule } from '../pipe/pipe.module';
 import { ChapterMetadataDetailComponent } from './chapter-metadata-detail/chapter-metadata-detail.component';
 import { MetadataFilterModule } from '../metadata-filter/metadata-filter.module';
 import { EditSeriesRelationComponent } from './edit-series-relation/edit-series-relation.component';
+import { EditSeriesExternalLinksComponent } from './edit-series-external-links/edit-series-external-links.component'; 
 import { CardDetailDrawerComponent } from './card-detail-drawer/card-detail-drawer.component';
 import { EntityTitleComponent } from './entity-title/entity-title.component';
 import { EntityInfoCardsComponent } from './entity-info-cards/entity-info-cards.component';
@@ -43,6 +44,7 @@ import { DownloadIndicatorComponent } from './download-indicator/download-indica
     BulkAddToCollectionComponent,
     ChapterMetadataDetailComponent,
     EditSeriesRelationComponent,
+    EditSeriesExternalLinksComponent,
     CardDetailDrawerComponent,
     EntityTitleComponent,
     EntityInfoCardsComponent,
@@ -88,6 +90,7 @@ import { DownloadIndicatorComponent } from './download-indicator/download-indica
     SeriesCardComponent,
     CoverImageChooserComponent,
     EditSeriesModalComponent,
+    EditSeriesExternalLinksComponent,
     EditCollectionTagsComponent,
     CardActionablesComponent,
     CardDetailLayoutComponent,
