@@ -202,18 +202,16 @@ export class SeriesService {
      alternativeSettings, alternativeVersions, doujinshis}); 
   }
 
-  getExternalLinksForSeries(seriesId: number) {
-    // return this.httpClient.get<SeriesExternalLinks>(this.baseUrl + 'series/all-external-links?seriesId=' + seriesId);
-
-    var testing = <SeriesExternalLinks>{};
-    testing.myanimelist = ["119375","https://myanimelist.net/manga/11/Naruto"];
-    testing.anilist = ["109310"];
-    testing.otherWebsite = ["https://www.kavitareader.com"];
-    return testing;
+  getSeriesExternalLinks(seriesId: number) {
+    return this.httpClient.get<SeriesExternalLinks>(this.baseUrl + 'series/all-external-links?seriesId=' + seriesId);
   }
 
-  updateExternalLinks(seriesId: number, otherWebsite: Array<string>) {
-    console.log("updateExternalLinks triggered!");
+  updateSeriesExternalLinks(seriesId: number, otherWebsite: Array<string>, aniList: Array<string>,
+    mangaUpdates: Array<string>, myAnimeList: Array<string>, goodreads: Array<string>) {
+    console.log("updateSeriesExternalLinks post call triggered!");
+
+    return this.httpClient.post(this.baseUrl + 'series/update-external-links?seriesId=' + seriesId, 
+    {otherWebsite, aniList, mangaUpdates, myAnimeList, goodreads}); 
   }
 
   getSeriesDetail(seriesId: number) {

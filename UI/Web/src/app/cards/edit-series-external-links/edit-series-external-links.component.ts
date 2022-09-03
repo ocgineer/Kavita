@@ -1,8 +1,8 @@
+import { isNgTemplate } from '@angular/compiler';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { map, Subject, Observable, of, firstValueFrom, takeUntil, ReplaySubject } from 'rxjs';
 import { UtilityService } from 'src/app/shared/_services/utility.service';
-import { SearchResult } from 'src/app/_models/search-result';
 import { Series } from 'src/app/_models/series';
 import { ExternalLinkKind, ExternalLinkKinds } from 'src/app/_models/series-detail/external-links-kind';
 import { ImageService } from 'src/app/_services/image.service';
@@ -10,7 +10,7 @@ import { LibraryService } from 'src/app/_services/library.service';
 import { SeriesService } from 'src/app/_services/series.service';
 
 export interface ExternalLinkControl {
-  website: string | undefined;
+  website: string;
   formControl: UntypedFormControl;
 }
 
@@ -45,19 +45,15 @@ export class EditSeriesExternalLinksComponent implements OnInit, OnDestroy {
     private readonly cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    //this.seriesService.getExternalLinksForSeries(this.series.id).subscribe(async elinks => {
-    //  this.setupExternalLinkRows(elinks.otherWebsite, ExternalLinkKind.OtherWebsite);
-    //  this.setupExternalLinkRows(elinks.goodreads, ExternalLinkKind.Goodreads);
-    //  this.setupExternalLinkRows(elinks.myanimelist, ExternalLinkKind.MyAnimeList);
-    //  this.setupExternalLinkRows(elinks.anilist, ExternalLinkKind.AniList);
-    //  this.setupExternalLinkRows(elinks.mangaupdates, ExternalLinkKind.MangaUpdates);
-    //  this.cdRef.detectChanges();
-    //});
-
-    /* some test values for UI mimicing getExternalLinsForSeries() */
-    this.setupExternalLinkRows(["119375","11"], ExternalLinkKind.MyAnimeList);
-    this.setupExternalLinkRows(["109310"], ExternalLinkKind.AniList);
-    this.setupExternalLinkRows(["https://www.kavitareader.com"], ExternalLinkKind.OtherWebsite);
+    console.log("series external links ngoninit"); console.log(this.series.id);
+    this.seriesService.getSeriesExternalLinks(566364).subscribe(async elink => {
+      this.setupExternalLinkRows(elink.otherWebsite, ExternalLinkKind.OtherWebsite);
+      this.setupExternalLinkRows(elink.aniList, ExternalLinkKind.AniList);
+      this.setupExternalLinkRows(elink.mangaUpdates, ExternalLinkKind.MangaUpdates);
+      this.setupExternalLinkRows(elink.myAnimeList, ExternalLinkKind.MyAnimeList);
+      this.setupExternalLinkRows(elink.goodreads, ExternalLinkKind.Goodreads);
+      this.cdRef.detectChanges();
+    });
 
     this.save.pipe(takeUntil(this.onDestroy)).subscribe(() => this.saveState());
   }
@@ -68,12 +64,12 @@ export class EditSeriesExternalLinksComponent implements OnInit, OnDestroy {
   }
 
   setupExternalLinkRows(elinks: Array<string>, kind: ExternalLinkKind) {
-    elinks.map(async item => {
-      return {website: item, formControl: new UntypedFormControl(kind, [])};
-    }).forEach(async p => {
-      this.elinks.push(await p);
-      this.cdRef.markForCheck();
-    });
+      elinks.map(async item => {
+        return {website: item, formControl: new UntypedFormControl(kind, [])};
+      }).forEach(async p => {
+        this.elinks.push(await p);
+        this.cdRef.markForCheck();
+      });
   }
 
   async addNewExternalLink() {
@@ -87,12 +83,16 @@ export class EditSeriesExternalLinksComponent implements OnInit, OnDestroy {
   }
 
   saveState() {
-    console.log("when is this triggered?");
-    //const otherWebsite = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.OtherWebsite && item.website !== undefined).map(item => item.website);
+    const otherWebsite = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.OtherWebsite && item.website !== undefined).map(item => item.website);
+    const aniList = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.AniList && item.website !== undefined).map(item => item.website);
+    const mangaUpdates = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.MangaUpdates && item.website !== undefined).map(item => item.website);
+    const myAnimeList = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.MyAnimeList && item.website !== undefined).map(item => item.website);
+    const goodreads = this.elinks.filter(item => (parseInt(item.formControl.value, 10) as ExternalLinkKind) === ExternalLinkKind.Goodreads && item.website !== undefined).map(item => item.website);
 
-    const otherWebsite = ["test", "https://google.com"];
+    console.log(goodreads);
+
     // TODO: We can actually emit this onto an observable and in main parent, use mergeMap into the forkJoin
-    //this.seriesService.updateExternalLinks(this.series.id, otherWebsite).subscribe(() => {});
+    this.seriesService.updateSeriesExternalLinks(566364, otherWebsite, aniList, mangaUpdates, myAnimeList, goodreads).subscribe(() => {});
   }
 
 }

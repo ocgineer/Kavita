@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -493,6 +494,38 @@ namespace API.Controllers
                 });
                 _unitOfWork.SeriesRepository.Update(series);
             }
+        }
+
+        /// <summary>
+        /// Returns all external links against the passed series Id
+        /// </summary>
+        /// <param name="seriesId"></param>
+        /// <returns></returns>
+        [HttpGet("all-external-links")]
+        public async Task<ActionResult<SeriesExternalLinksDto>> GetAllSeriesExternalLinks(int seriesId)
+        {
+            var userId = await _unitOfWork.UserRepository.GetUserIdByUsernameAsync(User.GetUsername());
+            return Ok(await _unitOfWork.SeriesRepository.GetSeriesExternalLinks(userId, seriesId));
+        }
+
+        /// <summary>
+        /// Update the external links attached to the Series.
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("update-external-links")]
+        public async Task<ActionResult> UpdateSeriesExternalLinks(UpdateSeriesExternalLinksDto dto)
+        {
+
+            Console.WriteLine("UpdateSeriesExternalLinks trigger");
+            Console.WriteLine(dto.Goodreads);
+
+            if (!_unitOfWork.HasChanges()) return Ok();
+            if (await _unitOfWork.CommitAsync()) return Ok();
+
+
+            return BadRequest("There was an issue updating external links");
         }
     }
 }

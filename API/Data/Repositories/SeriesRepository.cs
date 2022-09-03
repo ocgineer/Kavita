@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -110,6 +110,7 @@ public interface ISeriesRepository
     Task<IEnumerable<GroupedSeriesDto>> GetRecentlyUpdatedSeries(int userId, int pageSize = 30);
     Task<RelatedSeriesDto> GetRelatedSeries(int userId, int seriesId);
     Task<IEnumerable<SeriesDto>> GetSeriesForRelationKind(int userId, int seriesId, RelationKind kind);
+    Task<SeriesExternalLinksDto> GetSeriesExternalLinks(int userID, int SeriesId);
     Task<PagedList<SeriesDto>> GetQuickReads(int userId, int libraryId, UserParams userParams);
     Task<PagedList<SeriesDto>> GetQuickCatchupReads(int userId, int libraryId, UserParams userParams);
     Task<PagedList<SeriesDto>> GetHighlyRated(int userId, int libraryId, UserParams userParams);
@@ -1428,6 +1429,34 @@ public class SeriesRepository : ISeriesRepository
             .AsNoTracking()
             .ProjectTo<SeriesDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
+    }
+
+    public async Task<SeriesExternalLinksDto> GetSeriesExternalLinks(int userID, int SeriesId)
+    {
+        Console.WriteLine($"GetSeriesExternalLinks in SeriesRepositoty for series {SeriesId}.");
+
+        var mal = new List<string>();
+        mal.Add("119375");
+        mal.Add("11");
+        var al = new List<string>();
+        al.Add("109310");
+        var gr = new List<string>();
+        gr.Add("50437937");
+        gr.Add("52358147");
+        var ma = new List<string>();
+        ma.Add("hmgyqv");
+        var ow = new List<string>();
+        ow.Add("https://www.liliruca.net");
+
+        var test = new SeriesExternalLinksDto()
+        {
+            MyAnimeList = mal,
+            AniList = al,
+            Goodreads = gr,
+            MangaUpdates = ma,
+            OtherWebsite = ow
+        };
+        return test;
     }
 
     private async Task<IEnumerable<RecentlyAddedSeries>> GetRecentlyAddedChaptersQuery(int userId)
